@@ -14,11 +14,12 @@ class CartItemResource extends JsonResource
      */
     public function toArray($request)
     {
-            return [
-                'customer_id' => $this->customer_id,
-                'product_id' => $this->product_id,
-                'quantity' => $this->quantity,
-                'session_id' => $this->session_id
-            ];
+        return [
+            'id' => $this->id,
+            'customer_id' => $this->customer_id,
+            'product_id' => $this->product_id,
+            'quantity' => $this->quantity,
+            'session_id' => $this->session_id
+        ];
     }
 }

@@ -10,20 +10,21 @@ class CartItem extends Model
 {
     use HasFactory;
 
-      protected $fillable = [
-          'customer_id',
-          'product_id',
-          'quantity',
-          'session_id',
-      ];
+    protected $fillable = [
+        'id',
+        'customer_id',
+        'product_id',
+        'quantity',
+        'session_id',
+    ];
 
-     public function customer(): HasOne
-     {
-         return $this->hasOne(Customer::class);
-     }
+    public function customer(): HasOne
+    {
+        return $this->hasOne(Customer::class);
+    }
 
-      public function product(): HasOne
-      {
-          return $this->hasOne(Product::class);
-      }
+    public function product(): HasOne
+    {
+        return $this->hasOne(Product::class);
+    }
 }

@@ -82,7 +82,6 @@ class OrderController extends Controller
             "username" => "test_gwtest",
             "password" => "pTcMclRKCOAl"];
 
-
         $requestURL = 'https://sandbox.gateway-services.com/api/oauth/token';
         $response = Http::asJson()->acceptJson()
             ->timeout(60)->post($requestURL, $tokenBody)
@@ -97,14 +96,12 @@ class OrderController extends Controller
             $errorMessage = 'Error occurred while trying to get access token from the API.';
             return response()->json(['error' => $errorMessage], 400);
         }
-
         $tokenResponseData = $response->json();
         $token = Arr::get($tokenResponseData, 'access_token');
 
-
         //3. create order
         $order = Order::create([
-           'email' => Arr::get($data, 'email'),
+            'email' => Arr::get($data, 'email'),
             'total_amount' => Arr::get($data, 'total_amount'),
         ]);
 
@@ -132,8 +129,6 @@ class OrderController extends Controller
 
         $requestPaymentURL = 'https://sandbox.gateway-services.com/api/purchase';
 
-
-
         $errorDetails = [];
         $responsePayment = Http::asJson()->acceptJson()
             ->withToken($token)
@@ -152,17 +147,11 @@ class OrderController extends Controller
                 ]
             ], $errorDetails['status']);
         }
-
-
-
         $paymentResponseData = $responsePayment->json();
 
-
         //5 Update order
-
         $status = Arr::get($paymentResponseData,'status');
         $status_description = Arr::get($paymentResponseData,'status_description');
-
 
         $order->fill([
             'status' => $status,
@@ -172,8 +161,6 @@ class OrderController extends Controller
         $order->save();
 
         //6 Order items and cart item
-
-
         $customerID = $request->customer_id;
         $sessionID= $request->session_id;
 
@@ -183,7 +170,6 @@ class OrderController extends Controller
         } else {
             $cartItems = CartItem::where('session_id', $sessionID)->get();
         }
-
 
         $orderItems = [];
         foreach ($cartItems as $cartItem) {
@@ -195,11 +181,7 @@ class OrderController extends Controller
         }
 
         OrderItem::insert($orderItems);
-
-        $cartItems->each->delete();
-
-
-
+        $cartItems->delete();
         return response()->json(['message' => 'Purchase completed successfully for order '.$orderId], 200);
 
     }

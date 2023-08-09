@@ -67,13 +67,12 @@ const decrementQuantity = async (cartItem) => {
 
     cartItem.quantity=cartItem.quantity-1;
 
-    if (cartItem.quantity == 0){
+    if (cartItem.quantity === 0){
         console.log("zero");
         const product_id = cartItem.product_id;
-        console.log('PROD 1', product_id, 'is' ,typeof product_id);
-        console.log('PROD 2', cartItem.product_id, 'is' ,typeof cartItem.product_id);
 
-        await axios.delete(`api/cart-items/${session}/${product_id}`, {
+
+        await axios.delete(`api/cart-items/${session}/${cartItem.id}`, {
         }).then(response => {
             console.log('gone?',cartItem.product_id);
             cartTotal.value = cartTotal.value - parseFloat(cartItem.product_price);
